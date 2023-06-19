@@ -68,4 +68,55 @@ class WeatherModel {
       return 'Bring a 🧥 just in case';
     }
   }
+
+  Future<List<dynamic>> getCitiesWeather(
+      String cityName1, String cityName2, String cityName3) async {
+
+    List<dynamic> weatherList = [];
+
+    while (weatherList.length < 3) {
+      try {
+        NetworkHelper networkHelper1 = NetworkHelper(
+            '$openWeatherMapURL?q=$cityName1&appid=$apiKey&units=metric');
+        var weatherData1 = await networkHelper1.getData();
+        if (weatherData1 != null) {
+          weatherList.add(weatherData1);
+        }
+      } catch (e) {
+        print('Failed to retrieve weather data for $cityName1: $e');
+      }
+
+      try {
+        NetworkHelper networkHelper2 = NetworkHelper(
+            '$openWeatherMapURL?q=$cityName2&appid=$apiKey&units=metric');
+        var weatherData2 = await networkHelper2.getData();
+        if (weatherData2 != null) {
+          weatherList.add(weatherData2);
+        }
+      } catch (e) {
+        print('Failed to retrieve weather data for $cityName2: $e');
+      }
+
+      try {
+        NetworkHelper networkHelper3 = NetworkHelper(
+            '$openWeatherMapURL?q=$cityName3&appid=$apiKey&units=metric');
+        var weatherData3 = await networkHelper3.getData();
+        if (weatherData3 != null) {
+          weatherList.add(weatherData3);
+        }
+      } catch (e) {
+        print('Failed to retrieve weather data for $cityName3: $e');
+      }
+
+      // Wait for a short delay before making the next set of requests
+      await Future.delayed(const Duration(seconds: 2));
+    }
+
+    print('Weather data: $weatherList');
+
+    return weatherList;
+  }
+
+
+
 }

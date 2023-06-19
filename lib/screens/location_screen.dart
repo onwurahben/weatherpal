@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weatherpal/screens/location_weather.dart';
 import 'package:weatherpal/utilities/constants.dart';
 import 'package:weatherpal/services/weather.dart';
 import 'city_screen.dart';
@@ -7,9 +8,10 @@ import 'city_screen.dart';
 //This class updates UI using location from loadingScreen or user interaction
 
 class LocationScreen extends StatefulWidget {
-  const LocationScreen({super.key, this.locationWeather});
+  const LocationScreen({super.key, this.locationWeather, this.cities});
 
   final locationWeather;
+  final cities;
 
   @override
   _LocationScreenState createState() => _LocationScreenState();
@@ -23,6 +25,8 @@ class _LocationScreenState extends State<LocationScreen> {
   String? cityName;
   String? weatherMessage;
   var weatherInfo;
+  var cities;
+  String? weatherDescription;
 
   @override
   void initState() {
@@ -32,6 +36,7 @@ class _LocationScreenState extends State<LocationScreen> {
     updateUI(widget.locationWeather);
 
     weatherInfo = widget.locationWeather;
+    cities = widget.cities;
     print("hello");
   }
 
@@ -53,6 +58,11 @@ class _LocationScreenState extends State<LocationScreen> {
       weatherIcon = weather.getWeatherIcon(condition);
       weatherMessage = weather.getMessage(temperature!);
       cityName = weatherData['name'];
+
+      weatherDescription = weatherData['weather'][0]['description'];
+
+      print( weatherDescription);
+
     });
   }
 
@@ -81,8 +91,15 @@ class _LocationScreenState extends State<LocationScreen> {
                   //Get weather based on device location and update UI
                   TextButton(
                     onPressed: () async {
-                      var weatherData = await weather.getLocationWeather();
-                      updateUI(weatherData);
+
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context) {
+                          return  MyLocationScreen(locationWeather: weatherInfo, cities: cities);
+                        },
+                      ),);
+
+                      // var weatherData = await weather.getLocationWeather();
+                      // updateUI(weatherData);
                     },
                     child: const Icon(
                       Icons.near_me,
@@ -138,7 +155,7 @@ class _LocationScreenState extends State<LocationScreen> {
                 padding: const EdgeInsets.only(right: 15.0),
                 child: Text(
                   '$weatherMessage in $cityName',
-                  textAlign: TextAlign.right,
+                  textAlign: TextAlign.center,
                   style: kMessageTextStyle,
                 ),
               ),

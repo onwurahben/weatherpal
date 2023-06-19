@@ -10,12 +10,14 @@ class NetworkHelper {
 
 
   Future getData() async {
+
+    // http.get requests data from the url
     http.Response response = await http.get(url);
 
     if (response.statusCode == 200) {
       String data = response.body;
 
-      //This method formats the data
+      //This method formats the data from json string to objects
       return jsonDecode(data);
 
     } else {
