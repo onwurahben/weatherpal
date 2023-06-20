@@ -5,6 +5,8 @@ import 'location_screen.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:weatherpal/services/weather.dart';
 
+import 'location_weather.dart';
+
 //This class gets location and sends it to the location screen
 class LoadingScreen extends StatefulWidget {
   const LoadingScreen({super.key});
@@ -32,7 +34,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
     //send the weatherData to the LocationScreen
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return LocationScreen(
+      return MyLocationScreen(
         locationWeather: weatherData,
         cities: cities,
       );
@@ -100,3 +102,4 @@ class _LoadingScreenState extends State<LoadingScreen> {
     );
   }
 }
+

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weatherpal/color_constants.dart';
+import 'package:weatherpal/utilities/constants.dart';
 
 
 class BottomButton extends StatelessWidget {
@@ -23,7 +24,7 @@ class BottomButton extends StatelessWidget {
         child: Center(
           child: Text(
             buttonTitle,
-            style: const TextStyle(fontStyle: FontStyle.normal),
+            style: kTextStyle2,
           ),
         ),
       ),

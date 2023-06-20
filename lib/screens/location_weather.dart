@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weatherpal/ForecastScreen.dart';
 import 'package:weatherpal/color_constants.dart';
 import 'package:weatherpal/utilities/bottom_button.dart';
 import 'package:weatherpal/utilities/constants.dart';
@@ -114,9 +115,6 @@ class _MyLocationScreenState extends State<MyLocationScreen> {
       cardName3 = thirdCity['name'];
   }
 
-  void updateCard(dynamic city) {
-    //WeatherData is in Json Format
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -138,30 +136,77 @@ class _MyLocationScreenState extends State<MyLocationScreen> {
                       Colors.orange.withOpacity(0.4), BlendMode.dstATop),
                 ),
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    '$temperature°C',
-                    style: const TextStyle(fontSize: 96),
-                  ),
-                  Text(
-                    '$weatherDescription'.toUpperCase(),
-                    style: const TextStyle(fontSize: 18),
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    "$weatherMessage in $cityName!",
-                    style: const TextStyle(fontSize: 30, color: Colors.white),
-                  ),
-                ],
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      '$temperature°C',
+                      style: kTempTextStyle,
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          '$weatherDescription'.toUpperCase(),
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          weatherIcon!,
+                          style: kConditionTextStyle,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+
+                      "$weatherMessage in $cityName!",
+                      style: kMessageTextStyle,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-          const SizedBox(height: 20),
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text("Other cities"),
+
+           Padding(
+            padding: const EdgeInsets.only(left: 8.0, top: 30, bottom: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text("Other cities",
+                style: kTextStyle),
+                TextButton(
+                  onPressed: () async {
+
+                    // Navigate to city screen where user enters cityName and pops
+
+                    var typedName = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return const CityScreen();
+                        },
+                      ),
+                    );
+
+                    //City screen pops and sends cityName as typeName
+                    if (typedName != null) {
+                      var weatherData =
+                      await weather.getCityWeather(typedName);
+                      updateUI(weatherData);
+                    }
+                  },
+                  child: const Icon(
+                    Icons.location_city,
+                    size: 50.0,
+                  ),
+                ),
+              ],
+            ),
           ),
           Expanded(
             flex: 1,
@@ -191,15 +236,14 @@ class _MyLocationScreenState extends State<MyLocationScreen> {
                               ),
                               const SizedBox(height: 10),
                               Text(
-                                '$cardTemp1',
-                                style: const TextStyle(
-                                    fontSize: 12, color: Colors.white),
+                                '$cardTemp1°C',
+                                style: kTextStyle,
                               ),
+
                               const SizedBox(height: 10),
                                Text(
                                 '$cardName1',
-                                style: const TextStyle(
-                                    fontSize: 12, color: Colors.white),
+                                style: kTextStyle2,
                               ),
                             ],
                           ),
@@ -216,6 +260,7 @@ class _MyLocationScreenState extends State<MyLocationScreen> {
                         child: Padding(
                           padding: const EdgeInsets.all(20.0),
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Image.asset(
                                 'images/sun.png',
@@ -224,15 +269,13 @@ class _MyLocationScreenState extends State<MyLocationScreen> {
                               ),
                               const SizedBox(height: 10),
                               Text(
-                                '$cardTemp2',
-                                style: const TextStyle(
-                                    fontSize: 12, color: Colors.white),
+                                '$cardTemp2°C',
+                                style: kTextStyle,
                               ),
                               const SizedBox(height: 10),
                                Text(
-                                '$cardName2',
-                                style: const TextStyle(
-                                    fontSize: 12, color: Colors.white),
+                                   '$cardName2',
+                                   style: kTextStyle2,
                               ),
                             ],
                           ),
@@ -249,6 +292,7 @@ class _MyLocationScreenState extends State<MyLocationScreen> {
                         child: Padding(
                           padding: const EdgeInsets.all(20.0),
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Image.asset(
                                 'images/sun.png',
@@ -257,15 +301,13 @@ class _MyLocationScreenState extends State<MyLocationScreen> {
                               ),
                               const SizedBox(height: 10),
                               Text(
-                                '$cardTemp3',
-                                style: const TextStyle(
-                                    fontSize: 12, color: Colors.white),
+                                '$cardTemp3°C',
+                                style: kTextStyle,
                               ),
                               const SizedBox(height: 10),
                                Text(
-                                '$cardName3',
-                                style: const TextStyle(
-                                    fontSize: 12, color: Colors.white),
+                                 '$cardName3',
+                                 style: kTextStyle2,
                               ),
                             ],
                           ),
@@ -278,7 +320,12 @@ class _MyLocationScreenState extends State<MyLocationScreen> {
             ),
           ),
           SizedBox(
-            child: BottomButton(onTap: () {}, buttonTitle: "Get Forecasts"),
+            child: BottomButton(
+                onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return const ForecastScreen();
+              }));
+            }, buttonTitle: "Get Forecasts"),
           )
         ],
       ),

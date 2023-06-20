@@ -19,7 +19,7 @@ class ForecastModel {
   }
 
   //This method gets location, sends the location to the openWeather API and gets its weatherData
-  Future<dynamic> getLocationForecast(int days) async {
+  Future<dynamic> getLocationForecast() async {
 
     //use an instance of the location object to call its getLocation method
     Location location = Location();
@@ -33,6 +33,7 @@ class ForecastModel {
     var weatherData = await networkHelper.getData();
   //  print('Weather data: $weatherData');
 
+    print('it works: $weatherData');
     return weatherData;
 
   }
